@@ -3,6 +3,8 @@ package main
 import (
 	"fmt"
 	"math/rand"
+	"sort"
+	"strings"
 	"time"
 )
 
@@ -15,17 +17,60 @@ func main() {
 	m["D"] = 0
 	m["E"] = 0
 
+	insertRandomObj(m)
+
 	for i := 1; i <= steps; i++ {
-		// clear map
 		for i := range m {
-			m[i] = 0
+			if m[i] == 1 {
+				// clear map
+				m[i] = 0
+				// insert random object adjacent with current box
+				insertRandomObj2(m, i)
+			}
 		}
-		// insert random object
-		insertRandomObj(m)
 	}
 	fmt.Println(m)
 	objectInMap := findObj(m)
 	fmt.Println(objectInMap)
+}
+
+func insertRandomObj2(m map[string]int, huruf string) {
+	rand.Seed(time.Now().UnixNano())
+	angka := 0
+	for {
+		angka = rand.Intn(2)
+		if angka == 0 {
+			continue
+		}
+		if angka != 0 {
+			break
+		}
+	}
+	var slc = make([]string, 0)
+	for i := range m {
+		slc = append(slc, i)
+	}
+	slcSorted := sortString(slc)
+	for i, v := range slcSorted {
+		temp := 0
+		if huruf == v {
+			if angka == 1 {
+				temp = temp + i + 1
+				if temp > len(slc)-1 {
+					temp = 0
+				}
+				m[string(slc[temp])] = 1
+				break
+			} else {
+				temp--
+				if temp < 0 {
+					temp = len(slc) - 1
+				}
+				m[string(slc[temp])] = 1
+				break
+			}
+		}
+	}
 }
 
 func findObj(m map[string]int) string {
@@ -55,16 +100,16 @@ func insertRandomObj(m map[string]int) {
 	}
 }
 
-// func sortString(stringsSlice []string) []string {
-// 	strings1 := strings.Join(stringsSlice, "")
-// 	var stringsSorted = make([]int, 0)
-// 	for _, v := range strings1 {
-// 		stringsSorted = append(stringsSorted, int(v))
-// 	}
-// 	sort.Ints(stringsSorted)
-// 	var stringsSortedString = make([]byte, len(stringsSorted))
-// 	for i := 0; i < len(stringsSorted); i++ {
-// 		stringsSortedString[i] = byte(stringsSorted[i])
-// 	}
-// 	return strings.Split(string(stringsSortedString), "")
-// }
+func sortString(stringsSlice []string) []string {
+	strings1 := strings.Join(stringsSlice, "")
+	var stringsSorted = make([]int, 0)
+	for _, v := range strings1 {
+		stringsSorted = append(stringsSorted, int(v))
+	}
+	sort.Ints(stringsSorted)
+	var stringsSortedString = make([]byte, len(stringsSorted))
+	for i := 0; i < len(stringsSorted); i++ {
+		stringsSortedString[i] = byte(stringsSorted[i])
+	}
+	return strings.Split(string(stringsSortedString), "")
+}

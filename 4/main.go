@@ -21,6 +21,30 @@ func main() {
 		stringsSortedString[i] = byte(stringsSorted[i])
 	}
 	fmt.Println("sorted string:", string(stringsSortedString))
+	count := countOccurence(stringsSortedString)
+	for i, v := range count {
+		if v == 0 {
+			continue
+		}
+		fmt.Printf("occurence of letter %s = %d\n", string(i), v)
+	}
+}
+
+func countOccurence(s []byte) map[string]int {
+	var count = make(map[string]int)
+	for _, v := range letters {
+		count[string(v)] = 0
+	}
+	for _, v1 := range s {
+		temp := v1
+		for i := range count {
+			if string(i) == string(temp) {
+				count[string(temp)]++
+				break
+			}
+		}
+	}
+	return count
 }
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")

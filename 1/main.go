@@ -62,11 +62,11 @@ func get3bottles(slc []int) (slcOut []int) {
 		one := getRandIdx(slc)
 		two := getRandIdx(slc)
 		three := getRandIdx(slc)
-		if one == 0 || two == 0 || three == 0 {
-			continue
-		}
+		// if slc[one] == 0 || slc[two] == 0 || slc[three] == 0 {
+		// 	continue
+		// }
 		if one != two && two != three && three != one {
-			return append(slcOut, one, two, three)
+			return append(slcOut, slc[one], slc[two], slc[three])
 		}
 	}
 }
@@ -78,7 +78,7 @@ func getRandIdx(slc []int) int {
 
 func listOfPossibleBottle(x, y int) []int {
 	slc := make([]int, 0)
-	for i := x; i <= y; i++ {
+	for i := x + 1; i <= y; i++ {
 		if primeNumber(i) {
 			slc = append(slc, i)
 		}
